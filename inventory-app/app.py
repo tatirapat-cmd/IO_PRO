@@ -1,21 +1,15 @@
 from flask import Flask, render_template, request, jsonify, Response
-from datetime import datetime
-import io
 import inventory_logic as logic
 
 app = Flask(__name__)
 
-# โหลดข้อมูลจริงจากไฟล์ JSON บนเซิร์ฟเวอร์
 db_data = logic.load_data()
 
 def persist_data():
-    """ฟังก์ชันช่วยบันทึกข้อมูลลง JSON"""
     try:
         logic.save_data(db_data)
     except Exception as e:
         print(f"Save data warning: {e}")
-
-# --- Routes ---
 
 @app.route('/')
 def index():
@@ -37,7 +31,7 @@ def register():
             return jsonify({'success': True, 'message': msg})
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในระบบ: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -53,7 +47,7 @@ def login():
             return jsonify({'success': True, 'user': user_info, 'message': msg})
         return jsonify({'success': False, 'message': msg}), 401
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการเข้าสู่ระบบ: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/summary', methods=['GET'])
 def get_summary():
@@ -61,7 +55,7 @@ def get_summary():
         summary = logic.calculate_inventory_summary(db_data["products"])
         return jsonify({'success': True, 'data': summary})
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการโหลดข้อมูลสรุป: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/products', methods=['GET'])
 def get_products():
@@ -77,7 +71,7 @@ def get_products():
         )
         return jsonify({'success': True, 'products': items, 'pagination': pagination})
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการเรียกดูรายการสินค้า: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/products/add', methods=['POST'])
 def add_product():
@@ -89,7 +83,6 @@ def add_product():
         if role not in ['admin', 'staff']:
             return jsonify({'success': False, 'message': 'คุณไม่มีสิทธิ์ดำเนินการเพิ่มสินค้า'}), 403
 
-        # ส่งทุกช่องเข้าตรวจสอบ Spacebar นำหน้า
         val_success, val_msg, val_data = logic.validate_product_input(
             sku=data.get('sku'),
             name=data.get('name'),
@@ -117,12 +110,12 @@ def add_product():
 
         add_success, add_msg = logic.add_product(db_data["products"], val_data)
         if add_success:
-            logic.add_audit_log(db_data["audit_logs"], username, role, 'ADD_PRODUCT', f"เพิ่มสินค้า: {val_data['sku']} - {val_data['name']}")
+            logic.add_audit_log(db_data["audit_logs"], username, role, 'ADD_PRODUCT', f"เพิ่มสินค้า: {val_data['sku']}")
             persist_data()
             return jsonify({'success': True, 'message': add_msg})
         return jsonify({'success': False, 'message': add_msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการเพิ่มสินค้า: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/products/update', methods=['POST'])
 def update_product():
@@ -142,7 +135,7 @@ def update_product():
             return jsonify({'success': True, 'message': up_msg})
         return jsonify({'success': False, 'message': up_msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการแก้ไขสินค้า: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/products/restock', methods=['POST'])
 def restock_product():
@@ -164,12 +157,12 @@ def restock_product():
         )
 
         if success:
-            logic.add_audit_log(db_data["audit_logs"], username, role, 'STOCK_MOVEMENT', f"{action_type.upper()} {sku} จำนวน {quantity} ชิ้น ({reason})")
+            logic.add_audit_log(db_data["audit_logs"], username, role, 'STOCK_MOVEMENT', f"{action_type.upper()} {sku}")
             persist_data()
             return jsonify({'success': True, 'message': msg})
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการปรับสต๊อก: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/products/delete', methods=['DELETE'])
 def delete_product():
@@ -189,14 +182,14 @@ def delete_product():
             return jsonify({'success': True, 'message': del_msg})
         return jsonify({'success': False, 'message': del_msg}), 404
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการลบสินค้า: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/orders', methods=['GET'])
 def get_orders():
     try:
         return jsonify({'success': True, 'orders': db_data["purchase_orders"]})
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการดึงรายการคำสั่งซื้อ: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/orders/create', methods=['POST'])
 def create_order():
@@ -211,12 +204,12 @@ def create_order():
         )
 
         if success:
-            logic.add_audit_log(db_data["audit_logs"], customer, 'customer', 'CREATE_ORDER', f"สร้างคำสั่งซื้อ {new_order['order_id']} ({sku} x {qty})")
+            logic.add_audit_log(db_data["audit_logs"], customer, 'customer', 'CREATE_ORDER', f"สร้างคำสั่งซื้อ {new_order['order_id']}")
             persist_data()
             return jsonify({'success': True, 'message': msg, 'order': new_order})
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการสร้างคำสั่งซื้อ: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/orders/approve', methods=['POST'])
 def approve_order():
@@ -243,42 +236,14 @@ def approve_order():
             return jsonify({'success': True, 'message': msg})
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการอนุมัติคำสั่งซื้อ: {str(e)}"}), 500
-@app.route('/api/reset-data', methods=['POST'])
-def reset_data():
-    try:
-        data = request.get_json() or {}
-        role = data.get('current_role')
-        username = data.get('current_user')
-
-        if role != 'admin':
-            return jsonify({'success': False, 'message': 'เฉพาะผู้ดูแลระบบ (Admin) เท่านั้นที่มีสิทธิ์ล้างข้อมูล'}), 403
-
-        # กำหนดโครงสร้างข้อมูลให้เป็นค่าว่างทั้งหมด (ยกเว้น Users ที่เก็บไว้ให้ Admin ล็อกอินต่อได้)
-        global db_data
-        db_data["products"] = []
-        db_data["purchase_orders"] = []
-        db_data["stock_cards"] = []
-        db_data["supplier_pos"] = []
-        db_data["audit_logs"] = []
-
-        # บันทึกสถานะว่างเปล่าลงไฟล์ JSON ทันที
-        logic.save_data(db_data)
-        
-        # บันทึก Log การล้างข้อมูล
-        logic.add_audit_log(db_data["audit_logs"], username, role, 'RESET_DATA', 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว')
-        logic.save_data(db_data)
-
-        return jsonify({'success': True, 'message': 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว'})
-    except Exception as e:
         return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
-# --- Supplier PO Routes ---
+
 @app.route('/api/po', methods=['GET'])
 def get_supplier_pos():
     try:
         return jsonify({'success': True, 'supplier_pos': db_data["supplier_pos"]})
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการดึงรายการ PO: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/po/create', methods=['POST'])
 def create_supplier_po_route():
@@ -291,19 +256,19 @@ def create_supplier_po_route():
         qty = data.get('quantity')
 
         if role not in ['admin', 'staff']:
-            return jsonify({'success': False, 'message': 'ไม่มีสิทธิ์ออกใบสั่งซื้อ PO'}), 403
+            return jsonify({'success': False, 'message': 'ไม่มีสิทธิ์ออก PO'}), 403
 
         success, msg, po = logic.create_supplier_po(
             db_data["supplier_pos"], db_data["products"], supplier, sku, qty
         )
 
         if success:
-            logic.add_audit_log(db_data["audit_logs"], username, role, 'CREATE_PO', f"ออกใบสั่งซื้อ PO: {po['po_id']} ({sku} x {qty})")
+            logic.add_audit_log(db_data["audit_logs"], username, role, 'CREATE_PO', f"ออก PO: {po['po_id']}")
             persist_data()
             return jsonify({'success': True, 'message': msg})
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการออกใบสั่งซื้อ PO: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/po/receive', methods=['POST'])
 def receive_supplier_po_route():
@@ -321,12 +286,12 @@ def receive_supplier_po_route():
         )
 
         if success:
-            logic.add_audit_log(db_data["audit_logs"], username, role, 'RECEIVE_PO', f"รับสินค้าตามใบสั่งซื้อ PO: {po_id}")
+            logic.add_audit_log(db_data["audit_logs"], username, role, 'RECEIVE_PO', f"รับสินค้า PO: {po_id}")
             persist_data()
             return jsonify({'success': True, 'message': msg})
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการรับสินค้า PO: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/stock-cards', methods=['GET'])
 def get_stock_cards():
@@ -337,14 +302,39 @@ def get_stock_cards():
             cards = [c for c in cards if sku.upper() in c.get('sku', '').upper()]
         return jsonify({'success': True, 'stock_cards': cards})
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการดึงประวัติสต๊อก: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/logs', methods=['GET'])
 def get_logs():
     try:
         return jsonify({'success': True, 'audit_logs': db_data["audit_logs"]})
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการดึง Audit Logs: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
+
+@app.route('/api/reset-data', methods=['POST'])
+def reset_data():
+    try:
+        data = request.get_json() or {}
+        role = data.get('current_role')
+        username = data.get('current_user')
+
+        if role != 'admin':
+            return jsonify({'success': False, 'message': 'เฉพาะผู้ดูแลระบบ (Admin) เท่านั้นที่มีสิทธิ์ล้างข้อมูล'}), 403
+
+        global db_data
+        db_data["products"] = []
+        db_data["purchase_orders"] = []
+        db_data["stock_cards"] = []
+        db_data["supplier_pos"] = []
+        db_data["audit_logs"] = []
+
+        logic.save_data(db_data)
+        logic.add_audit_log(db_data["audit_logs"], username, role, 'RESET_DATA', 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว')
+        logic.save_data(db_data)
+
+        return jsonify({'success': True, 'message': 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 @app.route('/api/export/excel', methods=['GET'])
 def export_excel():
@@ -370,12 +360,12 @@ def import_excel():
 
         success, msg, count = logic.import_products_from_excel(file, db_data["products"])
         if success:
-            logic.add_audit_log(db_data["audit_logs"], "admin", "admin", "IMPORT_EXCEL", f"นำเข้าสินค้า {count} รายการจากไฟล์ Excel")
+            logic.add_audit_log(db_data["audit_logs"], "admin", "admin", "IMPORT_EXCEL", f"นำเข้าสินค้า {count} รายการ")
             persist_data()
             return jsonify({'success': True, 'message': msg})
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
-        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการนำเข้าไฟล์: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
