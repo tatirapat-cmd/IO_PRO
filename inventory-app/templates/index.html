@@ -1063,7 +1063,36 @@
             document.getElementById('sortBy').value = 'sku';
             currentPage = 1;
             loadProducts();
+        }async function resetAllData() {
+    if (currentUser.role !== 'admin') {
+        alert('เฉพาะ Admin เท่านั้นที่สามารถล้างข้อมูลได้');
+        return;
+    }
+    
+    if (!confirm('⚠️ คำเตือน: คุณต้องการล้างข้อมูลสินค้า ออเดอร์ และประวัติทั้งหมดในระบบใช่หรือไม่? การกระทำนี้ไม่สามารถกู้คืนได้!')) return;
+
+    try {
+        const res = await fetch('/api/reset-data', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ current_role: currentUser.role, current_user: currentUser.username })
+        });
+        const data = await res.json();
+        alert(data.message);
+        
+        if (data.success) {
+            // รีเฟรชหน้าจอทั้งหมดให้เป็นค่าว่าง
+            loadSummary();
+            loadProducts();
+            loadOrders();
+            if (typeof loadPOs === 'function') loadPOs();
+            if (typeof loadStockCards === 'function') loadStockCards();
+            if (typeof loadLogs === 'function') loadLogs();
         }
+    } catch (err) {
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+    }
+}
     </script>
 </body>
 </html>
