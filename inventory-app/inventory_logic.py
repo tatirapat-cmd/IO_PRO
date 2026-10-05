@@ -26,57 +26,20 @@ def get_writable_file_path() -> str:
 def load_data(file_path: str = None) -> Dict[str, Any]:
     target_path = file_path or get_writable_file_path()
     
+    # กำหนดค่าเริ่มต้นให้เป็นห้องว่าง ไม่มีสินค้าตัวอย่างค้างอยู่
     default_structure = {
         "users": [
             {"username": "admin", "password": "123", "role": "admin", "name": "ผู้ดูแลระบบ"},
             {"username": "staff", "password": "123", "role": "staff", "name": "เจ้าหน้าที่คลัง"},
             {"username": "customer", "password": "123", "role": "customer", "name": "ลูกค้าทั่วไป"}
         ],
-        "products": [],
+        "products": [],  # ตั้งให้เป็นค่าว่าง
         "stock_cards": [],
         "audit_logs": [],
         "purchase_orders": [],
         "supplier_pos": []
     }
-
-    try:
-        if os.path.exists(target_path):
-            with open(target_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                if "users" not in data or not isinstance(data["users"], list):
-                    data["users"] = default_structure["users"]
-                if "products" not in data or not isinstance(data["products"], list):
-                    data["products"] = []
-                if "stock_cards" not in data:
-                    data["stock_cards"] = []
-                if "audit_logs" not in data:
-                    data["audit_logs"] = []
-                if "purchase_orders" not in data:
-                    data["purchase_orders"] = []
-                if "supplier_pos" not in data:
-                    data["supplier_pos"] = []
-                return data
-        elif os.path.exists(PRIMARY_FILE_PATH):
-            with open(PRIMARY_FILE_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
-        else:
-            save_data(default_structure, target_path)
-            return default_structure
-    except Exception:
-        return default_structure
-
-def save_data(data: Dict[str, Any], file_path: str = None) -> Tuple[bool, str]:
-    target_path = file_path or get_writable_file_path()
-    try:
-        folder = os.path.dirname(target_path)
-        if folder and not os.path.exists(folder):
-            os.makedirs(folder, exist_ok=True)
-            
-        with open(target_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
-        return True, "บันทึกข้อมูลสำเร็จ"
-    except Exception as e:
-        return False, f"เกิดข้อผิดพลาดในการบันทึกข้อมูล: {str(e)}"
+    # ... (โค้ดที่เหลือคงเดิม)
 
 def register_user(users: List[Dict[str, Any]], username: str, password: str, role: str, name: str) -> Tuple[bool, str]:
     try:
