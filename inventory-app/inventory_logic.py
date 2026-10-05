@@ -529,116 +529,83 @@ def clean_number(val, default=0.0):
 def import_products_from_excel(file_stream, existing_products: List[Dict[str, Any]]) -> Tuple[bool, str, int]:
     try:
         df = pd.read_excel(file_stream)
-        clean_cols = [str(c).strip().lower().replace(" ", "_").replace("(", "").replace(")", "").replace("/", "_") for c in df.columns]
-        df.columns = clean_cols
+        
+        # แปลงชื่อคอลัมน์ให้เป็นตัวพิมพ์เล็กทั้งหมดเพื่อให้อ่านง่าย
+        df.columns = [str(c).strip().lower() for c in df.columns]
 
-        column_mapping = {
-            'sku': ['sku', 'รหัส', 'รหัสสินค้า', 'code', 'item_code', 'product_sku'],
-            'name': ['name', 'ชื่อ', 'ชื่อสินค้า', 'รายการ', 'รายการสินค้า', 'product_name', 'item_name', 'title'],
-            'company': ['company', 'บริษัท', 'ซัพพลายเออร์', 'ผู้ผลิต', 'แบรนด์', 'brand', 'supplier'],
-            'category': ['category', 'หมวดหมู่', 'หมวด', 'กลุ่มสินค้า', 'cat'],
-            'unit': ['unit', 'หน่วย', 'หน่วยนับ'],
-            'cost_price': ['cost_price', 'cost', 'ต้นทุน', 'ราคาทุน', 'ราคาทุน_บาท', 'ราคาต้นทุน', 'costprice'],
-            'selling_price': ['selling_price', 'price', 'unit_price', 'sell_price', 'ราคาขาย', 'ราคา', 'ราคาขาย_บาท', 'ราคา_หน่วย', 'sellingprice'],
-            'quantity': ['quantity', 'stock_qty', 'stock_quantity', 'qty_stock', 'in_stock', 'qty', 'stock', 'จำนวน', 'สต็อก', 'จำนวนสินค้า', 'ปริมาณ', 'สต็อกคงเหลือ', 'คงเหลือ', 'จำนวนคงเหลือ'],
-            'min_stock': ['min_stock', 'min', 'จุดสั่งซื้อ', 'ขั้นต่ำ', 'สต็อกขั้นต่ำ', 'min_qty'],
-            'supplier': ['supplier', 'ผู้ขาย', 'ผู้จัดจำหน่าย'],
-            'warehouse': ['warehouse', 'คลัง', 'คลังสินค้า'],
-            'expiry_date': ['expiry_date', 'expiry', 'วันหมดอายุ']
-        }
-
-        actual_cols = {}
-        for target_key, aliases in column_mapping.items():
-            for alias in aliases:
-                alias_clean = alias.lower().replace(" ", "_")
-                if alias_clean in df.columns:
-                    actual_cols[target_key] = alias_clean
-                    break
-
-        if 'quantity' not in actual_cols:
-            for col in df.columns:
-                if 'qty' in col or 'stock' in col or 'จำนวน' in col:
-                    actual_cols['quantity'] = col
-                    break
-
-        if 'selling_price' not in actual_cols:
-            for col in df.columns:
-                if 'price' in col or 'ราคา' in col:
-                    actual_cols['selling_price'] = col
-                    break
-
-        # ตรวจสอบความพร้อมของคอลัมน์ SKU และ Name อย่างปลอดภัย
-        sku_key = actual_cols.get('sku')
-        name_key = actual_cols.get('name')
-
-        if not sku_key or not name_key or sku_key not in df.columns or name_key not in df.columns:
-            return False, "ไฟล์ Excel ต้องมีคอลัมน์ 'sku' และ 'name' (หรือ รหัสสินค้า / ชื่อสินค้า)", 0
+        # ตรวจสอบคอลัมน์บังคับ (sku และ name)
+        if 'sku' not in df.columns or 'name' not in df.columns:
+            return False, "ไฟล์ Excel จำเป็นต้องมีคอลัมน์ชื่อ 'sku' และ 'name'", 0
 
         imported_count = 0
-        existing_skus = {p["sku"]: p for p in existing_products if isinstance(p, dict)}
+        
+        # ทำให้อ้างอิงสินค้าเดิมเป็น Dict โดยใช้ SKU เป็น Key
+        existing_map = {}
+        for p in existing_products:
+            if isinstance(p, dict) and 'sku' in p:
+                existing_map[str(p['sku']).strip().upper()] = p
 
         for _, row in df.iterrows():
-            sku_val = row.get(sku_key, "")
-            sku = str(sku_val).strip().upper() if pd.notna(sku_val) else ""
-            if not sku or sku == "NAN" or sku == "NONE":
+            # ดึงค่า SKU
+            sku_val = row.get('sku')
+            if pd.isna(sku_val):
+                continue
+            sku = str(sku_val).strip().upper()
+            if not sku or sku == 'NAN':
                 continue
 
-            name_val = row.get(name_key, "")
-            name = str(name_val).strip() if pd.notna(name_val) else ""
+            # ดึงค่า Name
+            name_val = row.get('name')
+            name = str(name_val).strip() if pd.notna(name_val) else "ไม่ระบุชื่อ"
 
-            comp_col = actual_cols.get('company')
-            company = str(row[comp_col]).strip() if comp_col and comp_col in df.columns and pd.notna(row[comp_col]) else "-"
+            # ดึงค่า Category (ถ้าไม่มีให้เป็น 'ทั่วไป')
+            cat_val = row.get('category')
+            category = str(cat_val).strip() if pd.notna(cat_val) else "ทั่วไป"
 
-            cat_col = actual_cols.get('category')
-            category = str(row[cat_col]).strip() if cat_col and cat_col in df.columns and pd.notna(row[cat_col]) else "ทั่วไป"
+            # ดึงค่า Price / Selling Price
+            price_val = row.get('price')
+            if pd.isna(price_val):
+                price_val = row.get('selling_price', 0.0)
+            try:
+                selling_price = float(price_val)
+            except (ValueError, TypeError):
+                selling_price = 0.0
 
-            unit_col = actual_cols.get('unit')
-            unit = str(row[unit_col]).strip() if unit_col and unit_col in df.columns and pd.notna(row[unit_col]) else "ชิ้น"
+            # ดึงค่า Stock / Quantity
+            qty_val = row.get('stock_qty')
+            if pd.isna(qty_val):
+                qty_val = row.get('quantity', 0)
+            try:
+                quantity = int(float(qty_val))
+            except (ValueError, TypeError):
+                quantity = 0
 
-            price_col = actual_cols.get('selling_price')
-            selling_price = clean_number(row[price_col], 0.0) if price_col and price_col in df.columns else 0.0
-
-            cost_col = actual_cols.get('cost_price')
-            cost_price = clean_number(row[cost_col], selling_price) if cost_col and cost_col in df.columns else selling_price
-
-            qty_col = actual_cols.get('quantity')
-            quantity = int(clean_number(row[qty_col], 0)) if qty_col and qty_col in df.columns else 0
-
-            min_col = actual_cols.get('min_stock')
-            min_stock = int(clean_number(row[min_col], 5)) if min_col and min_col in df.columns else 5
-
-            supp_col = actual_cols.get('supplier')
-            supplier = str(row[supp_col]).strip() if supp_col and supp_col in df.columns and pd.notna(row[supp_col]) else company
-
-            wh_col = actual_cols.get('warehouse')
-            warehouse = str(row[wh_col]).strip() if wh_col and wh_col in df.columns and pd.notna(row[wh_col]) else "คลังหลัก"
-
-            exp_col = actual_cols.get('expiry_date')
-            expiry_date = str(row[exp_col]).strip() if exp_col and exp_col in df.columns and pd.notna(row[exp_col]) else ""
-
+            # จัดรูปแบบข้อมูลสินค้าใหม่
             prod_data = {
                 "sku": sku,
                 "name": name,
-                "company": company,
+                "company": "-",
                 "category": category,
-                "unit": unit,
-                "cost_price": float(cost_price),
-                "selling_price": float(selling_price),
-                "quantity": int(quantity),
-                "min_stock": int(min_stock),
-                "supplier": supplier,
-                "warehouse": warehouse,
-                "expiry_date": expiry_date
+                "unit": "ชิ้น",
+                "cost_price": selling_price, # ใช้ราคาเดียวกันเผื่อไว้
+                "selling_price": selling_price,
+                "quantity": quantity,
+                "min_stock": 5,
+                "supplier": "-",
+                "warehouse": "คลังหลัก",
+                "expiry_date": ""
             }
 
-            if sku in existing_skus:
-                existing_skus[sku].update(prod_data)
+            # ถ้ามี SKU นี้อยู่แล้วให้อัปเดตข้อมูล ถ้ายังไม่มีให้เพิ่มใหม่
+            if sku in existing_map:
+                existing_map[sku].update(prod_data)
             else:
                 existing_products.append(prod_data)
-                existing_skus[sku] = prod_data
+                existing_map[sku] = prod_data
 
             imported_count += 1
 
         return True, f"นำเข้าข้อมูลสินค้าสำเร็จจำนวน {imported_count} รายการ", imported_count
+
     except Exception as e:
         return False, f"เกิดข้อผิดพลาดในการนำเข้าไฟล์ Excel: {str(e)}", 0
