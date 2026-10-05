@@ -11,7 +11,6 @@ PRIMARY_FILE_PATH: str = os.path.join("data", "stock_data.json")
 TMP_FILE_PATH: str = os.path.join("/tmp", "stock_data.json")
 
 def get_writable_file_path() -> str:
-    """ตรวจสอบตำแหน่งไฟล์ที่สามารถเขียนได้จริง"""
     try:
         folder = os.path.dirname(PRIMARY_FILE_PATH)
         if folder and not os.path.exists(folder):
@@ -25,7 +24,6 @@ def get_writable_file_path() -> str:
         return TMP_FILE_PATH
 
 def load_data(file_path: str = None) -> Dict[str, Any]:
-    """1. โหลดข้อมูลจากไฟล์ JSON พร้อมโครงสร้างพื้นฐาน"""
     target_path = file_path or get_writable_file_path()
     
     default_structure = {
@@ -34,36 +32,7 @@ def load_data(file_path: str = None) -> Dict[str, Any]:
             {"username": "staff", "password": "123", "role": "staff", "name": "เจ้าหน้าที่คลัง"},
             {"username": "customer", "password": "123", "role": "customer", "name": "ลูกค้าทั่วไป"}
         ],
-        "products": [
-            {
-                "sku": "SKU-1001",
-                "name": "โน้ตบุ๊กประมวลผลสูง",
-                "company": "บริษัท เทคโซลูชัน จำกัด",
-                "category": "Electronics",
-                "unit": "เครื่อง",
-                "cost_price": 22000.0,
-                "selling_price": 28900.0,
-                "quantity": 15,
-                "min_stock": 5,
-                "supplier": "บริษัท เทคโซลูชัน จำกัด",
-                "warehouse": "คลังสินค้า A",
-                "expiry_date": "2028-12-31"
-            },
-            {
-                "sku": "SKU-1002",
-                "name": "เมาส์ไร้สาย Ergonomic",
-                "company": "บริษัท ไอทีดิสทริบิวชัน จำกัด",
-                "category": "Electronics",
-                "unit": "อัน",
-                "cost_price": 450.0,
-                "selling_price": 890.0,
-                "quantity": 3,
-                "min_stock": 10,
-                "supplier": "บริษัท ไอทีดิสทริบิวชัน จำกัด",
-                "warehouse": "คลังสินค้า A",
-                "expiry_date": "2029-06-30"
-            }
-        ],
+        "products": [],
         "stock_cards": [],
         "audit_logs": [],
         "purchase_orders": [],
@@ -77,7 +46,7 @@ def load_data(file_path: str = None) -> Dict[str, Any]:
                 if "users" not in data or not isinstance(data["users"], list):
                     data["users"] = default_structure["users"]
                 if "products" not in data or not isinstance(data["products"], list):
-                    data["products"] = default_structure["products"]
+                    data["products"] = []
                 if "stock_cards" not in data:
                     data["stock_cards"] = []
                 if "audit_logs" not in data:
@@ -97,7 +66,6 @@ def load_data(file_path: str = None) -> Dict[str, Any]:
         return default_structure
 
 def save_data(data: Dict[str, Any], file_path: str = None) -> Tuple[bool, str]:
-    """2. บันทึกข้อมูลลงไฟล์ JSON"""
     target_path = file_path or get_writable_file_path()
     try:
         folder = os.path.dirname(target_path)
@@ -111,7 +79,6 @@ def save_data(data: Dict[str, Any], file_path: str = None) -> Tuple[bool, str]:
         return False, f"เกิดข้อผิดพลาดในการบันทึกข้อมูล: {str(e)}"
 
 def register_user(users: List[Dict[str, Any]], username: str, password: str, role: str, name: str) -> Tuple[bool, str]:
-    """3. ระบบสมัครสมาชิกพร้อมตรวจสอบข้อมูล (Validation)"""
     try:
         if not username or not password or not name:
             return False, "กรุณากรอกข้อมูลให้ครบทุกช่อง"
@@ -141,7 +108,6 @@ def register_user(users: List[Dict[str, Any]], username: str, password: str, rol
         return False, f"เกิดข้อผิดพลาดในการสมัครสมาชิก: {str(e)}"
 
 def authenticate_user(users: List[Dict[str, Any]], username: str, password: str) -> Tuple[bool, str, Dict[str, Any]]:
-    """4. ตรวจสอบการเข้าสู่ระบบ (Login)"""
     try:
         if not username or not password:
             return False, "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน", {}
@@ -162,9 +128,7 @@ def authenticate_user(users: List[Dict[str, Any]], username: str, password: str)
         return False, f"เกิดข้อผิดพลาดในการเข้าสู่ระบบ: {str(e)}", {}
 
 def validate_product_input(sku: str, name: str, cost_str: Any, price_str: Any, qty_str: Any, min_stock_str: Any = 5, company: str = "", category: str = "", unit: str = "", supplier: str = "", warehouse: str = "") -> Tuple[bool, str, Dict[str, Any]]:
-    """5. ตรวจสอบข้อมูลนำเข้าสินค้า (Validation) - เช็ก Spacebar นำหน้าทุกช่องข้อความ"""
     try:
-        # รวมช่องข้อความทั้งหมดมาเช็ก Spacebar นำหน้า
         text_fields = {
             "SKU": sku,
             "ชื่อสินค้า": name,
@@ -217,51 +181,7 @@ def validate_product_input(sku: str, name: str, cost_str: Any, price_str: Any, q
     except Exception as e:
         return False, f"ตรวจสอบข้อมูลไม่ผ่าน: {str(e)}", {}
 
-
-def update_product(products: List[Dict[str, Any]], sku: str, update_data: Dict[str, Any]) -> Tuple[bool, str]:
-    """9. แก้ไขข้อมูลสินค้าที่มีอยู่เดิม - เช็ก Spacebar นำหน้าทุกช่องข้อความ"""
-    try:
-        sku = str(sku).strip().upper()
-        target_p = next((p for p in products if p.get("sku") == sku), None)
-
-        if not target_p:
-            return False, f"ไม่พบสินค้าที่มีรหัส SKU: {sku}"
-
-        # เช็ก Spacebar นำหน้าในทุกฟิลด์ที่มีการส่งค่าเข้ามาแก้ไข
-        text_keys = ["name", "company", "category", "unit", "supplier", "warehouse"]
-        for k in text_keys:
-            if k in update_data and str(update_data[k]).startswith(' '):
-                return False, "โปรดใส่ชื่อให้ถูกต้อง"
-
-        if "name" in update_data:
-            name_val = str(update_data["name"]).strip()
-            if not name_val:
-                return False, "กรุณากรอกชื่อสินค้า"
-            target_p["name"] = name_val
-
-        if "company" in update_data:
-            target_p["company"] = str(update_data["company"]).strip() or "-"
-        if "category" in update_data:
-            target_p["category"] = str(update_data["category"]).strip() or "ทั่วไป"
-        if "unit" in update_data:
-            target_p["unit"] = str(update_data["unit"]).strip() or "ชิ้น"
-        if "cost_price" in update_data:
-            target_p["cost_price"] = float(update_data["cost_price"])
-        if "selling_price" in update_data:
-            target_p["selling_price"] = float(update_data["selling_price"])
-        if "min_stock" in update_data:
-            target_p["min_stock"] = int(update_data["min_stock"])
-        if "supplier" in update_data:
-            target_p["supplier"] = str(update_data["supplier"]).strip() or "-"
-        if "warehouse" in update_data:
-            target_p["warehouse"] = str(update_data["warehouse"]).strip() or "คลังหลัก"
-
-        return True, f"อัปเดตข้อมูลสินค้า SKU {sku} สำเร็จ"
-    except Exception as e:
-        return False, f"เกิดข้อผิดพลาดในการอัปเดตสินค้า: {str(e)}"
-
 def generate_unique_id(items: List[Dict[str, Any]], prefix: str = "ORD") -> str:
-    """6. สร้าง ID แบบไม่ซ้ำ โดยใช้ while loop"""
     existing_ids = {i.get("id", i.get("order_id", i.get("po_id"))) for i in items if isinstance(i, dict)}
     counter = len(items) + 1
     new_id = f"{prefix}-{counter:03d}"
@@ -273,7 +193,6 @@ def generate_unique_id(items: List[Dict[str, Any]], prefix: str = "ORD") -> str:
     return new_id
 
 def process_stock_movement(products: List[Dict[str, Any]], stock_cards: List[Dict[str, Any]], sku: str, action_type: str, qty_change: int, reason: str, operator: str) -> Tuple[bool, str, Dict[str, Any]]:
-    """7. ปรับยอดสต๊อก (รับเข้า/เบิกออก/ปรับยอด) พร้อมบันทึก Stock Card"""
     try:
         sku = str(sku).strip().upper()
         target_product = next((p for p in products if p.get("sku") == sku), None)
@@ -326,7 +245,6 @@ def process_stock_movement(products: List[Dict[str, Any]], stock_cards: List[Dic
         return False, f"เกิดข้อผิดพลาดในการปรับสต๊อก: {str(e)}", {}
 
 def add_product(products: List[Dict[str, Any]], product_data: Dict[str, Any]) -> Tuple[bool, str]:
-    """8. เพิ่มสินค้าใหม่ลงคลัง"""
     try:
         sku = product_data.get("sku", "").strip().upper()
         if any(p.get("sku") == sku for p in products):
@@ -352,7 +270,6 @@ def add_product(products: List[Dict[str, Any]], product_data: Dict[str, Any]) ->
         return False, f"เกิดข้อผิดพลาดในการเพิ่มสินค้า: {str(e)}"
 
 def update_product(products: List[Dict[str, Any]], sku: str, update_data: Dict[str, Any]) -> Tuple[bool, str]:
-    """9. แก้ไขข้อมูลสินค้าที่มีอยู่เดิม"""
     try:
         sku = str(sku).strip().upper()
         target_p = next((p for p in products if p.get("sku") == sku), None)
@@ -360,8 +277,17 @@ def update_product(products: List[Dict[str, Any]], sku: str, update_data: Dict[s
         if not target_p:
             return False, f"ไม่พบสินค้าที่มีรหัส SKU: {sku}"
 
-        if "name" in update_data and str(update_data["name"]).strip():
-            target_p["name"] = str(update_data["name"]).strip()
+        text_keys = ["name", "company", "category", "unit", "supplier", "warehouse"]
+        for k in text_keys:
+            if k in update_data and str(update_data[k]).startswith(' '):
+                return False, "โปรดใส่ชื่อให้ถูกต้อง"
+
+        if "name" in update_data:
+            name_val = str(update_data["name"]).strip()
+            if not name_val:
+                return False, "กรุณากรอกชื่อสินค้า"
+            target_p["name"] = name_val
+
         if "company" in update_data:
             target_p["company"] = str(update_data["company"]).strip() or "-"
         if "category" in update_data:
@@ -384,7 +310,6 @@ def update_product(products: List[Dict[str, Any]], sku: str, update_data: Dict[s
         return False, f"เกิดข้อผิดพลาดในการอัปเดตสินค้า: {str(e)}"
 
 def delete_product(products: List[Dict[str, Any]], sku: str) -> Tuple[bool, str]:
-    """10. ลบสินค้าออกจากคลัง"""
     try:
         sku = str(sku).strip().upper()
         for i, p in enumerate(products):
@@ -396,7 +321,6 @@ def delete_product(products: List[Dict[str, Any]], sku: str) -> Tuple[bool, str]
         return False, f"เกิดข้อผิดพลาดในการลบสินค้า: {str(e)}"
 
 def create_customer_order(orders: List[Dict[str, Any]], products: List[Dict[str, Any]], sku: str, qty: Any, cust_name: str) -> Tuple[bool, str, Dict[str, Any]]:
-    """11. สร้างคำสั่งซื้อใหม่สำหรับลูกค้า"""
     try:
         sku = str(sku).strip().upper()
         target_p = next((p for p in products if p.get("sku") == sku), None)
@@ -435,7 +359,6 @@ def create_customer_order(orders: List[Dict[str, Any]], products: List[Dict[str,
         return False, f"เกิดข้อผิดพลาดในการสร้างคำสั่งซื้อ: {str(e)}", {}
 
 def create_supplier_po(supplier_pos: List[Dict[str, Any]], products: List[Dict[str, Any]], supplier: str, sku: str, qty: Any) -> Tuple[bool, str, Dict[str, Any]]:
-    """12. ออกใบสั่งซื้อ Supplier (PO - Purchase Order)"""
     try:
         sku = str(sku).strip().upper()
         target_p = next((p for p in products if p.get("sku") == sku), None)
@@ -470,7 +393,6 @@ def create_supplier_po(supplier_pos: List[Dict[str, Any]], products: List[Dict[s
         return False, f"เกิดข้อผิดพลาดในการออกใบสั่งซื้อ PO: {str(e)}", {}
 
 def receive_supplier_po(supplier_pos: List[Dict[str, Any]], products: List[Dict[str, Any]], stock_cards: List[Dict[str, Any]], po_id: str, operator: str) -> Tuple[bool, str]:
-    """13. รับสินค้าเข้าคลังจากใบสั่งซื้อ PO"""
     try:
         po = next((p for p in supplier_pos if p.get("po_id") == po_id), None)
         if not po:
@@ -495,7 +417,6 @@ def receive_supplier_po(supplier_pos: List[Dict[str, Any]], products: List[Dict[
         return False, f"เกิดข้อผิดพลาดในการรับสินค้า PO: {str(e)}"
 
 def approve_customer_order(products: List[Dict[str, Any]], stock_cards: List[Dict[str, Any]], order: Dict[str, Any], operator: str) -> Tuple[bool, str, Dict[str, Any]]:
-    """14. อนุมัติคำสั่งซื้อและตัดสต็อกสินค้าจริง"""
     try:
         if order.get("status") != "Pending":
             return False, f"คำสั่งซื้อนี้อยู่ในสถานะ '{order.get('status')}' ไม่สามารถอนุมัติซ้ำได้", {}
@@ -517,7 +438,6 @@ def approve_customer_order(products: List[Dict[str, Any]], stock_cards: List[Dic
         return False, f"เกิดข้อผิดพลาดในการอนุมัติคำสั่งซื้อ: {str(e)}", {}
 
 def calculate_inventory_summary(products: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """15. สรุปข้อมูลสต็อกสำหรับ Dashboard และกราฟวงกลม"""
     total_sku = len(products)
     total_quantity = 0
     total_cost_value = 0.0
@@ -561,7 +481,6 @@ def calculate_inventory_summary(products: List[Dict[str, Any]]) -> Dict[str, Any
     }
 
 def filter_and_paginate(items: List[Dict[str, Any]], search_term: str = "", category: str = "", sort_by: str = "sku", page: int = 1, per_page: int = 5) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    """16. ค้นหา กรอง เรียงลำดับ และแบ่งหน้า (Pagination)"""
     try:
         filtered = []
         search_term = str(search_term).lower().strip()
@@ -613,7 +532,6 @@ def filter_and_paginate(items: List[Dict[str, Any]], search_term: str = "", cate
         return [], {"current_page": 1, "per_page": 5, "total_items": 0, "total_pages": 1}
 
 def add_audit_log(logs: List[Dict[str, Any]], username: str, role: str, action: str, details: str) -> List[Dict[str, Any]]:
-    """17. บันทึก Audit Log"""
     log_entry = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "username": str(username),
@@ -625,7 +543,6 @@ def add_audit_log(logs: List[Dict[str, Any]], username: str, role: str, action: 
     return logs
 
 def export_products_to_excel(products: List[Dict[str, Any]]) -> io.BytesIO:
-    """18. ส่งออกข้อมูลสินค้าเป็นไฟล์ Excel (.xlsx)"""
     df = pd.DataFrame(products)
     cols_order = ["sku", "name", "company", "category", "unit", "cost_price", "selling_price", "quantity", "min_stock", "supplier", "warehouse", "expiry_date"]
     present_cols = [c for c in cols_order if c in df.columns]
@@ -638,7 +555,6 @@ def export_products_to_excel(products: List[Dict[str, Any]]) -> io.BytesIO:
     return output
 
 def clean_number(val, default=0.0):
-    """ฟังก์ชันช่วยแปลงตัวเลข ลบเครื่องหมาย , ฿ $ และช่องว่างออก"""
     if pd.isna(val) or val is None or str(val).strip() == '':
         return default
     try:
@@ -648,18 +564,11 @@ def clean_number(val, default=0.0):
         return default
 
 def import_products_from_excel(file_stream, existing_products: List[Dict[str, Any]]) -> Tuple[bool, str, int]:
-    """19. นำเข้าข้อมูลสินค้าจากไฟล์ Excel (.xlsx) รองรับหัวตาราง stock_qty และค้นหาคำย่อยยืดหยุ่น"""
     try:
         df = pd.read_excel(file_stream)
-        
-        # ปรับชื่อคอลัมน์เป็นตัวพิมพ์เล็ก ลบช่องว่าง/อักขระพิเศษ
         clean_cols = [str(c).strip().lower().replace(" ", "_").replace("(", "").replace(")", "").replace("/", "_") for c in df.columns]
         df.columns = clean_cols
 
-        print(f"\n--- [EXCEL IMPORT LOG] ---")
-        print(f"Detected Excel Columns: {list(df.columns)}")
-
-        # พจนานุกรมจับคู่ชื่อคอลัมน์ (เพิ่ม stock_qty, price, unit_price และคำผสมย่อย)
         column_mapping = {
             'sku': ['sku', 'รหัส', 'รหัสสินค้า', 'code', 'item_code', 'product_sku'],
             'name': ['name', 'ชื่อ', 'ชื่อสินค้า', 'รายการ', 'รายการสินค้า', 'product_name', 'item_name', 'title'],
@@ -675,7 +584,6 @@ def import_products_from_excel(file_stream, existing_products: List[Dict[str, An
             'expiry_date': ['expiry_date', 'expiry', 'วันหมดอายุ']
         }
 
-        # 1. ค้นหาแบบตรงตัว
         actual_cols = {}
         for target_key, aliases in column_mapping.items():
             for alias in aliases:
@@ -684,7 +592,6 @@ def import_products_from_excel(file_stream, existing_products: List[Dict[str, An
                     actual_cols[target_key] = alias_clean
                     break
 
-        # 2. ค้นหาแบบสุ่มคำย่อย (Fallback Substring Search) หากยังจับคู่จำนวนหรือราคาไม่ได้
         if 'quantity' not in actual_cols:
             for col in df.columns:
                 if 'qty' in col or 'stock' in col or 'จำนวน' in col:
@@ -697,15 +604,13 @@ def import_products_from_excel(file_stream, existing_products: List[Dict[str, An
                     actual_cols['selling_price'] = col
                     break
 
-        print(f"Mapped Columns Result: {actual_cols}")
-
         if 'sku' not in actual_cols or 'name' not in actual_cols:
-            return False, "ไฟล์ Excel ต้องมีคอลัมน์ 'SKU' (หรือ รหัสสินค้า) และ 'Name' (หรือ ชื่อสินค้า)", 0
+            return False, "ไฟล์ Excel ต้องมีคอลัมน์ 'SKU' และ 'Name'", 0
 
         imported_count = 0
         existing_skus = {p["sku"]: p for p in existing_products if isinstance(p, dict)}
 
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             sku_val = row.get(actual_cols['sku'], "")
             sku = str(sku_val).strip().upper() if pd.notna(sku_val) else ""
             if not sku or sku == "NAN" or sku == "NONE":
@@ -727,7 +632,6 @@ def import_products_from_excel(file_stream, existing_products: List[Dict[str, An
             selling_price = clean_number(row[price_col], 0.0) if price_col else 0.0
 
             cost_col = actual_cols.get('cost_price')
-            # หากใน Excel ไม่มีราคาทุน ให้ใช้ราคาขายเป็นฐานชั่วคราว
             cost_price = clean_number(row[cost_col], selling_price) if cost_col else selling_price
 
             qty_col = actual_cols.get('quantity')
@@ -767,10 +671,7 @@ def import_products_from_excel(file_stream, existing_products: List[Dict[str, An
                 existing_skus[sku] = prod_data
 
             imported_count += 1
-            print(f"Row {index+1} Imported: SKU={sku}, Name={name}, Qty={quantity}, Cost={cost_price}, Price={selling_price}")
 
-        print(f"--- [END LOG] Total Imported: {imported_count} --- \n")
         return True, f"นำเข้าข้อมูลสินค้าสำเร็จจำนวน {imported_count} รายการ", imported_count
     except Exception as e:
-        print(f"Import Error: {str(e)}")
         return False, f"เกิดข้อผิดพลาดในการนำเข้าไฟล์ Excel: {str(e)}", 0
