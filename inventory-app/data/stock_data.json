@@ -1,0 +1,409 @@
+{
+  "products": [
+    {
+      "sku": "SKU-1001",
+      "name": "โน้ตบุ๊กประมวลผลสูง",
+      "company": "บริษัท เทคโซลูชัน จำกัด",
+      "category": "อิเล็กทรอนิกส์",
+      "unit": "เครื่อง",
+      "cost_price": 22000.0,
+      "selling_price": 28900.0,
+      "quantity": 10,
+      "min_stock": 5,
+      "supplier": "บริษัท เทคโซลูชัน จำกัด",
+      "warehouse": "คลังสินค้า A",
+      "expiry_date": "2028-12-31"
+    },
+    {
+      "sku": "SKU-1002",
+      "name": "เมาส์ไร้สาย Ergonomic",
+      "company": "บริษัท ไอทีดิสทริบิวชัน จำกัด",
+      "category": "อุปกรณ์เสริม",
+      "unit": "อัน",
+      "cost_price": 450.0,
+      "selling_price": 890.0,
+      "quantity": 50,
+      "min_stock": 10,
+      "supplier": "บริษัท ไอทีดิสทริบิวชัน จำกัด",
+      "warehouse": "คลังสินค้า A",
+      "expiry_date": "2029-06-30"
+    },
+    {
+      "sku": "SKU-1003",
+      "name": "จอ160hz",
+      "company": "บริษัท คอนเนคท์ ไอที จำกัด",
+      "category": "อิเล็กทรอนิกส์",
+      "unit": "ชิ้น",
+      "cost_price": 4899.0,
+      "selling_price": 6299.0,
+      "quantity": 19,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-002",
+      "name": "กางเกงยีนส์ขายาวทรงกระบอก",
+      "company": "-",
+      "category": "เสื้อผ้า",
+      "unit": "ชิ้น",
+      "cost_price": 890.0,
+      "selling_price": 890.0,
+      "quantity": 80,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-003",
+      "name": "กระติกน้ำสแตนเลสเก็บความร้อน 500 ml",
+      "company": "-",
+      "category": "ของใช้ในบ้าน",
+      "unit": "ชิ้น",
+      "cost_price": 350.0,
+      "selling_price": 350.0,
+      "quantity": 200,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-004",
+      "name": "พัดลมตั้งโต๊ะ 16 นิ้ว",
+      "company": "-",
+      "category": "เครื่องใช้ไฟฟ้า",
+      "unit": "ชิ้น",
+      "cost_price": 650.0,
+      "selling_price": 650.0,
+      "quantity": 45,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-005",
+      "name": "หม้อหุงข้าวไฟฟ้า 1.8 ลิตร",
+      "company": "-",
+      "category": "เครื่องใช้ไฟฟ้า",
+      "unit": "ชิ้น",
+      "cost_price": 1290.0,
+      "selling_price": 1290.0,
+      "quantity": 30,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-006",
+      "name": "ชุดผ้าปูที่นอน 6 ฟุต (5 ชิ้น)",
+      "company": "-",
+      "category": "ของใช้ในบ้าน",
+      "unit": "ชิ้น",
+      "cost_price": 790.0,
+      "selling_price": 790.0,
+      "quantity": 60,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-007",
+      "name": "เก้าอี้ทำงานเพื่อสุขภาพ Ergonomic",
+      "company": "-",
+      "category": "เฟอร์นิเจอร์",
+      "unit": "ชิ้น",
+      "cost_price": 3450.0,
+      "selling_price": 3450.0,
+      "quantity": 15,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-008",
+      "name": "โคมไฟอ่านหนังสือ LED ไร้สาย",
+      "company": "-",
+      "category": "เครื่องใช้ไฟฟ้า",
+      "unit": "ชิ้น",
+      "cost_price": 420.0,
+      "selling_price": 420.0,
+      "quantity": 110,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-009",
+      "name": "รองเท้าผ้าใบสปอร์ตสีขาว ไซส์ 42",
+      "company": "-",
+      "category": "รองเท้า",
+      "unit": "ชิ้น",
+      "cost_price": 1150.0,
+      "selling_price": 1150.0,
+      "quantity": 75,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "PROD-010",
+      "name": "กระเป๋าเป้สะพายหลังกันน้ำ 20L",
+      "company": "-",
+      "category": "กระเป๋า",
+      "unit": "ชิ้น",
+      "cost_price": 580.0,
+      "selling_price": 580.0,
+      "quantity": 90,
+      "min_stock": 5,
+      "supplier": "-",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "SKU-67",
+      "name": "หูฟังgaming",
+      "company": "kku",
+      "category": "Electronics",
+      "unit": "ชิ้น",
+      "cost_price": 100.0,
+      "selling_price": 500.0,
+      "quantity": 100,
+      "min_stock": 2,
+      "supplier": "kku",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "SKU-6000",
+      "name": "TECNO POVA 6 PRO 5G",
+      "company": "tecno",
+      "category": "Electronics",
+      "unit": "ชิ้น",
+      "cost_price": 7999.0,
+      "selling_price": 9999.0,
+      "quantity": 10,
+      "min_stock": 5,
+      "supplier": "tecno",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    },
+    {
+      "sku": "SKU-7789452",
+      "name": "earpin",
+      "company": "Logitech",
+      "category": "Electronics",
+      "unit": "ชิ้น",
+      "cost_price": 100.0,
+      "selling_price": 900.0,
+      "quantity": 11,
+      "min_stock": 5,
+      "supplier": "Logitech",
+      "warehouse": "คลังหลัก",
+      "expiry_date": ""
+    }
+  ],
+  "stock_cards": [
+    {
+      "timestamp": "2026-10-05 19:52:50",
+      "sku": "SKU-1001",
+      "product_name": "โน้ตบุ๊กประมวลผลสูง",
+      "action": "adjust",
+      "quantity_change": -9992,
+      "balance_after": 10,
+      "reason": "เติมสต๊อกสินค้า",
+      "operator": "admin"
+    },
+    {
+      "timestamp": "2026-10-05 19:42:13",
+      "sku": "SKU-1001",
+      "product_name": "โน้ตบุ๊กประมวลผลสูง",
+      "action": "in",
+      "quantity_change": 10000,
+      "balance_after": 10002,
+      "reason": "เติมสต๊อกสินค้า",
+      "operator": "admin"
+    },
+    {
+      "timestamp": "2026-10-05 00:01:01",
+      "sku": "SKU-1001",
+      "product_name": "โน้ตบุ๊กประมวลผลสูง",
+      "action": "out",
+      "quantity_change": 5,
+      "balance_after": 2,
+      "reason": "อนุมัติคำสั่งซื้อ ORD-003",
+      "operator": "staff"
+    },
+    {
+      "timestamp": "2026-10-04 23:51:54",
+      "sku": "SKU-1001",
+      "product_name": "โน้ตบุ๊กประมวลผลสูง",
+      "action": "out",
+      "quantity_change": 3,
+      "balance_after": 7,
+      "reason": "อนุมัติคำสั่งซื้อ ORD-002",
+      "operator": "admin"
+    }
+  ],
+  "audit_logs": [
+    {
+      "timestamp": "2026-10-05 20:41:23",
+      "username": "admin",
+      "role": "admin",
+      "action": "ADD_PRODUCT",
+      "details": "เพิ่มสินค้า: SKU-7789452 - earpin"
+    },
+    {
+      "timestamp": "2026-10-05 20:38:32",
+      "username": "admin",
+      "role": "admin",
+      "action": "DELETE_PRODUCT",
+      "details": "ลบสินค้า SKU: PROD-001"
+    },
+    {
+      "timestamp": "2026-10-05 20:35:59",
+      "username": "admin",
+      "role": "admin",
+      "action": "ADD_PRODUCT",
+      "details": "เพิ่มสินค้า: SKU-6000 - TECNO POVA 6 PRO 5G"
+    },
+    {
+      "timestamp": "2026-10-05 20:02:16",
+      "username": "admin",
+      "role": "admin",
+      "action": "ADD_PRODUCT",
+      "details": "เพิ่มสินค้า: SKU-67 - หูฟังgaming"
+    },
+    {
+      "timestamp": "2026-10-05 20:00:39",
+      "username": "admin",
+      "role": "admin",
+      "action": "IMPORT_EXCEL",
+      "details": "นำเข้าสินค้า 10 รายการจากไฟล์ Excel"
+    },
+    {
+      "timestamp": "2026-10-05 19:57:58",
+      "username": "admin",
+      "role": "admin",
+      "action": "IMPORT_EXCEL",
+      "details": "นำเข้าสินค้า 10 รายการจากไฟล์ Excel"
+    },
+    {
+      "timestamp": "2026-10-05 19:57:35",
+      "username": "admin",
+      "role": "admin",
+      "action": "IMPORT_EXCEL",
+      "details": "นำเข้าสินค้า 10 รายการจากไฟล์ Excel"
+    },
+    {
+      "timestamp": "2026-10-05 19:57:17",
+      "username": "admin",
+      "role": "admin",
+      "action": "IMPORT_EXCEL",
+      "details": "นำเข้าสินค้า 10 รายการจากไฟล์ Excel"
+    },
+    {
+      "timestamp": "2026-10-05 19:55:14",
+      "username": "admin",
+      "role": "admin",
+      "action": "IMPORT_EXCEL",
+      "details": "นำเข้าสินค้า 10 รายการจากไฟล์ Excel"
+    },
+    {
+      "timestamp": "2026-10-05 19:52:50",
+      "username": "admin",
+      "role": "admin",
+      "action": "STOCK_MOVEMENT",
+      "details": "ADJUST SKU-1001 จำนวน 10 ชิ้น (เติมสต๊อกสินค้า)"
+    },
+    {
+      "timestamp": "2026-10-05 19:51:35",
+      "username": "admin",
+      "role": "admin",
+      "action": "IMPORT_EXCEL",
+      "details": "นำเข้าสินค้า 10 รายการจากไฟล์ Excel"
+    },
+    {
+      "timestamp": "2026-10-05 19:42:13",
+      "username": "admin",
+      "role": "admin",
+      "action": "STOCK_MOVEMENT",
+      "details": "IN SKU-1001 จำนวน 10000 ชิ้น (เติมสต๊อกสินค้า)"
+    },
+    {
+      "timestamp": "2026-10-05 00:01:01",
+      "username": "staff",
+      "role": "staff",
+      "action": "อนุมัติออเดอร์",
+      "details": "อนุมัติ ORD-003"
+    },
+    {
+      "timestamp": "2026-10-04 23:51:54",
+      "username": "admin",
+      "role": "admin",
+      "action": "อนุมัติออเดอร์",
+      "details": "อนุมัติ ORD-002"
+    }
+  ],
+  "purchase_orders": [
+    {
+      "order_id": "ORD-003",
+      "customer": "ลูกค้าทั่วไป",
+      "sku": "SKU-1001",
+      "product_name": "โน้ตบุ๊กประมวลผลสูง",
+      "quantity": 5,
+      "total_price": 144500.0,
+      "status": "Approved",
+      "timestamp": "2026-10-05 00:00:22"
+    },
+    {
+      "order_id": "ORD-002",
+      "customer": "ลูกค้าทั่วไป",
+      "sku": "SKU-1001",
+      "product_name": "โน้ตบุ๊กประมวลผลสูง",
+      "quantity": 3,
+      "total_price": 86700.0,
+      "status": "Approved",
+      "timestamp": "2026-10-04 23:51:28"
+    },
+    {
+      "order_id": "ORD-001",
+      "customer": "ลูกค้าทั่วไป",
+      "sku": "SKU-1001",
+      "product_name": "โน้ตบุ๊กประมวลผลสูง",
+      "quantity": 3,
+      "total_price": 86700.0,
+      "status": "Pending",
+      "timestamp": "2026-10-04 23:51:17"
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "password": "123",
+      "role": "admin",
+      "name": "ผู้ดูแลระบบ"
+    },
+    {
+      "username": "staff",
+      "password": "123",
+      "role": "staff",
+      "name": "เจ้าหน้าที่คลัง"
+    },
+    {
+      "username": "customer",
+      "password": "123",
+      "role": "customer",
+      "name": "ลูกค้าทั่วไป"
+    }
+  ],
+  "supplier_pos": []
+}
