@@ -254,19 +254,24 @@ def reset_data():
         if role != 'admin':
             return jsonify({'success': False, 'message': 'เฉพาะผู้ดูแลระบบ (Admin) เท่านั้นที่มีสิทธิ์ล้างข้อมูล'}), 403
 
-        # ล้างข้อมูลสินค้า, ออเดอร์, Stock card, และ Supplier PO
+        # กำหนดโครงสร้างข้อมูลให้เป็นค่าว่างทั้งหมด (ยกเว้น Users ที่เก็บไว้ให้ Admin ล็อกอินต่อได้)
+        global db_data
         db_data["products"] = []
         db_data["purchase_orders"] = []
         db_data["stock_cards"] = []
         db_data["supplier_pos"] = []
+        db_data["audit_logs"] = []
+
+        # บันทึกสถานะว่างเปล่าลงไฟล์ JSON ทันที
+        logic.save_data(db_data)
         
+        # บันทึก Log การล้างข้อมูล
         logic.add_audit_log(db_data["audit_logs"], username, role, 'RESET_DATA', 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว')
-        persist_data()
+        logic.save_data(db_data)
 
         return jsonify({'success': True, 'message': 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว'})
     except Exception as e:
         return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
-
 # --- Supplier PO Routes ---
 @app.route('/api/po', methods=['GET'])
 def get_supplier_pos():
