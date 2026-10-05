@@ -102,23 +102,24 @@
                             <option value="Electronics">Electronics</option>
                             <option value="Furniture">Furniture</option>
                             <option value="Office">Office</option>
+                            <option value="เสื้อผ้า">เสื้อผ้า</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <select id="sortBy" class="form-select" onchange="currentPage=1; loadProducts();">
                             <option value="sku">เรียงตาม SKU</option>
-                            <option value="qty_asc">จำนวนสต็อก (น้อย -> มาก)</option>
-                            <option value="qty_desc">จำนวนสต็อก (มาก -> น้อย)</option>
+                            <option value="qty_asc">สต็อก (น้อย -> มาก)</option>
+                            <option value="qty_desc">สต็อก (มาก -> น้อย)</option>
                             <option value="price_asc">ราคาขาย (ต่ำ -> สูง)</option>
                             <option value="price_desc">ราคาขาย (สูง -> ต่ำ)</option>
                         </select>
                     </div>
-                    <div class="col-md-4 d-flex gap-1">
-                        <button class="btn btn-outline-secondary" onclick="resetFilters()" title="รีเซ็ต"><i class="fa-solid fa-rotate"></i></button>
-                        <button class="btn btn-info text-white admin-staff-only w-100" onclick="openImportModal()"><i class="fa-solid fa-file-import me-1"></i> Import</button>
-                        <button class="btn btn-success admin-staff-only w-100" onclick="exportExcel()"><i class="fa-solid fa-file-excel me-1"></i> Export</button>
-                        <button class="btn btn-primary admin-staff-only w-100" onclick="openProductModal()"><i class="fa-solid fa-plus me-1"></i> เพิ่ม</button>
-                        <button class="btn btn-danger admin-staff-only w-100" onclick="resetAllData()"><i class="fa-solid fa-triangle-exclamation me-1"></i> ล้างข้อมูลทั้งหมด</button>
+                    <div class="col-md-5 d-flex gap-1 flex-wrap">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="resetFilters()" title="รีเซ็ต"><i class="fa-solid fa-rotate"></i></button>
+                        <button class="btn btn-info text-white admin-staff-only btn-sm" onclick="openImportModal()"><i class="fa-solid fa-file-import me-1"></i> Import</button>
+                        <button class="btn btn-success admin-staff-only btn-sm" onclick="exportExcel()"><i class="fa-solid fa-file-excel me-1"></i> Export</button>
+                        <button class="btn btn-primary admin-staff-only btn-sm" onclick="openProductModal()"><i class="fa-solid fa-plus me-1"></i> เพิ่ม</button>
+                        <button class="btn btn-danger admin-staff-only btn-sm" onclick="resetAllData()"><i class="fa-solid fa-trash-can me-1"></i> ล้างทั้งหมด</button>
                     </div>
                 </div>
             </div>
@@ -270,7 +271,7 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
+    <!-- Modals -->
     <div class="modal fade" id="loginModal" tabindex="-1">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -280,14 +281,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="loginForm">
-                        <div class="mb-3">
-                            <label class="form-label">Username</label>
-                            <input type="text" id="loginUser" class="form-control" required placeholder="admin / staff / customer">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" id="loginPass" class="form-control" required placeholder="123">
-                        </div>
+                        <div class="mb-3"><label class="form-label">Username</label><input type="text" id="loginUser" class="form-control" required></div>
+                        <div class="mb-3"><label class="form-label">Password</label><input type="password" id="loginPass" class="form-control" required></div>
                         <button type="submit" class="btn btn-primary w-100">เข้าสู่ระบบ</button>
                     </form>
                 </div>
@@ -295,7 +290,6 @@
         </div>
     </div>
 
-    <!-- Register Modal -->
     <div class="modal fade" id="registerModal" tabindex="-1">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -311,9 +305,9 @@
                         <div class="mb-3">
                             <label class="form-label">สิทธิ์ผู้ใช้งาน (Role)</label>
                             <select id="regRole" class="form-select">
-                                <option value="customer">Customer (ลูกค้า)</option>
-                                <option value="staff">Staff (เจ้าหน้าที่คลัง)</option>
-                                <option value="admin">Admin (ผู้ดูแลระบบ)</option>
+                                <option value="customer">Customer</option>
+                                <option value="staff">Staff</option>
+                                <option value="admin">Admin</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-warning w-100 fw-bold">ยืนยันลงทะเบียน</button>
@@ -323,7 +317,6 @@
         </div>
     </div>
 
-    <!-- Add Product Modal -->
     <div class="modal fade" id="productModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -333,7 +326,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="productForm">
-                        <div class="mb-2"><label class="form-label">รหัส SKU</label><input type="text" id="pSku" class="form-control" required placeholder="เช่น SKU-1004"></div>
+                        <div class="mb-2"><label class="form-label">รหัส SKU</label><input type="text" id="pSku" class="form-control" required></div>
                         <div class="mb-2"><label class="form-label">ชื่อสินค้า</label><input type="text" id="pName" class="form-control" required></div>
                         <div class="mb-2"><label class="form-label">บริษัท / ซัพพลายเออร์</label><input type="text" id="pCompany" class="form-control" required></div>
                         <div class="row g-2 mb-2">
@@ -353,18 +346,17 @@
         </div>
     </div>
 
-    <!-- Edit Product Modal -->
     <div class="modal fade" id="editProductModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="fa-solid fa-pen-to-square me-2"></i>แก้ไขข้อมูลสินค้า</h5>
+                    <h5 class="modal-title">แก้ไขข้อมูลสินค้า</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editProductForm">
                         <input type="hidden" id="editSku">
-                        <div class="mb-2"><label class="form-label fw-bold">รหัส SKU</label><input type="text" id="editSkuDisplay" class="form-control" disabled></div>
+                        <div class="mb-2"><label class="form-label">รหัส SKU</label><input type="text" id="editSkuDisplay" class="form-control" disabled></div>
                         <div class="mb-2"><label class="form-label">ชื่อสินค้า</label><input type="text" id="editName" class="form-control" required></div>
                         <div class="mb-2"><label class="form-label">บริษัท / ซัพพลายเออร์</label><input type="text" id="editCompany" class="form-control" required></div>
                         <div class="row g-2 mb-2">
@@ -383,33 +375,28 @@
         </div>
     </div>
 
-    <!-- Import Excel Modal -->
     <div class="modal fade" id="importModal" tabindex="-1">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title"><i class="fa-solid fa-file-import me-2"></i>นำเข้าข้อมูล Excel</h5>
+                    <h5 class="modal-title">นำเข้า Excel</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="importForm">
-                        <div class="mb-3">
-                            <label class="form-label">เลือกไฟล์ (.xlsx)</label>
-                            <input type="file" id="excelFile" class="form-control" accept=".xlsx, .xls" required>
-                        </div>
-                        <button type="submit" class="btn btn-info text-white w-100 fw-bold">อัปโหลดไฟล์</button>
+                        <div class="mb-3"><label class="form-label">เลือกไฟล์ (.xlsx)</label><input type="file" id="excelFile" class="form-control" accept=".xlsx, .xls" required></div>
+                        <button type="submit" class="btn btn-info text-white w-100 fw-bold">อัปโหลด</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Restock / Stock Movement Modal -->
     <div class="modal fade" id="restockModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h6 class="modal-title fw-bold"><i class="fa-solid fa-boxes-packing me-2"></i>ปรับยอดสต๊อกสินค้า</h6>
+                    <h6 class="modal-title fw-bold">ปรับยอดสต๊อก</h6>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -421,25 +408,18 @@
                             <select id="restockType" class="form-select">
                                 <option value="in">รับเข้า (In)</option>
                                 <option value="out">เบิกออก (Out)</option>
-                                <option value="adjust">ปรับยอดคงเหลือจริง (Adjust)</option>
+                                <option value="adjust">ปรับยอดจริง (Adjust)</option>
                             </select>
                         </div>
-                        <div class="mb-2">
-                            <label class="form-label fw-bold">จำนวน</label>
-                            <input type="number" id="restockQty" class="form-control" min="1" value="10" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">เหตุผลประกอบ</label>
-                            <input type="text" id="restockReason" class="form-control" placeholder="เช่น เติมสต๊อกประจำสัปดาห์" required>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold">ยืนยันทำรายการ</button>
+                        <div class="mb-2"><label class="form-label fw-bold">จำนวน</label><input type="number" id="restockQty" class="form-control" min="1" value="10" required></div>
+                        <div class="mb-3"><label class="form-label">เหตุผล</label><input type="text" id="restockReason" class="form-control" required></div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">ยืนยัน</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Order Modal -->
     <div class="modal fade" id="orderModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -449,14 +429,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="orderForm">
-                        <div class="mb-3">
-                            <label class="form-label">เลือก SKU สินค้า</label>
-                            <select id="orderSkuSelect" class="form-select" required></select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">จำนวน</label>
-                            <input type="number" id="orderQty" class="form-control" min="1" value="1" required>
-                        </div>
+                        <div class="mb-3"><label class="form-label">เลือก SKU สินค้า</label><select id="orderSkuSelect" class="form-select" required></select></div>
+                        <div class="mb-3"><label class="form-label">จำนวน</label><input type="number" id="orderQty" class="form-control" min="1" value="1" required></div>
                         <button type="submit" class="btn btn-success w-100">ยืนยันคำสั่งซื้อ</button>
                     </form>
                 </div>
@@ -464,28 +438,18 @@
         </div>
     </div>
 
-    <!-- Supplier PO Modal -->
     <div class="modal fade" id="poModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="fa-solid fa-file-circle-plus me-2"></i>ออกใบสั่งซื้อหาผู้ขาย (PO)</h5>
+                    <h5 class="modal-title">ออกใบสั่งซื้อ PO</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="poForm">
-                        <div class="mb-2">
-                            <label class="form-label">เลือก SKU สินค้าที่ต้องการสั่งเพิ่ม</label>
-                            <select id="poSkuSelect" class="form-select" required></select>
-                        </div>
-                        <div class="mb-2">
-                            <label class="form-label">ชื่อบริษัทผู้ขาย / ซัพพลายเออร์</label>
-                            <input type="text" id="poSupplier" class="form-control" placeholder="เช่น บริษัท ไอทีดิสทริบิวชัน จำกัด" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">จำนวนสั่งซื้อ</label>
-                            <input type="number" id="poQty" class="form-control" min="1" value="20" required>
-                        </div>
+                        <div class="mb-2"><label class="form-label">เลือก SKU สินค้า</label><select id="poSkuSelect" class="form-select" required></select></div>
+                        <div class="mb-2"><label class="form-label">ซัพพลายเออร์</label><input type="text" id="poSupplier" class="form-control" required></div>
+                        <div class="mb-3"><label class="form-label">จำนวน</label><input type="number" id="poQty" class="form-control" min="1" value="20" required></div>
                         <button type="submit" class="btn btn-primary w-100 fw-bold">ออกใบสั่งซื้อ PO</button>
                     </form>
                 </div>
@@ -518,7 +482,6 @@
 
         function updateRoleUI() {
             document.getElementById('userInfoDisplay').innerHTML = `<i class="fa-solid fa-user me-1"></i> ${currentUser.name} (${currentUser.role})`;
-
             const sensitiveElements = document.querySelectorAll('.sensitive-info');
             const adminStaffElements = document.querySelectorAll('.admin-staff-only');
 
@@ -541,7 +504,6 @@
             e.preventDefault();
             const username = document.getElementById('loginUser').value;
             const password = document.getElementById('loginPass').value;
-
             try {
                 const res = await fetch('/api/login', {
                     method: 'POST',
@@ -549,7 +511,6 @@
                     body: JSON.stringify({ username, password })
                 });
                 const data = await res.json();
-
                 if (data.success) {
                     currentUser = data.user;
                     updateRoleUI();
@@ -557,10 +518,8 @@
                     loadSummary();
                     loadProducts();
                     loadOrders();
-                } else {
-                    alert(data.message);
-                }
-            } catch (err) { alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์'); }
+                } else { alert(data.message); }
+            } catch (err) { alert('เกิดข้อผิดพลาด'); }
         });
 
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -571,7 +530,6 @@
                 password: document.getElementById('regPass').value,
                 role: document.getElementById('regRole').value
             };
-
             try {
                 const res = await fetch('/api/register', {
                     method: 'POST',
@@ -580,11 +538,8 @@
                 });
                 const data = await res.json();
                 alert(data.message);
-                if (data.success) {
-                    registerModal.hide();
-                    document.getElementById('registerForm').reset();
-                }
-            } catch (err) { alert('ไม่สามารถสมัครสมาชิกได้'); }
+                if (data.success) { registerModal.hide(); document.getElementById('registerForm').reset(); }
+            } catch (err) { alert('เกิดข้อผิดพลาด'); }
         });
 
         async function loadSummary() {
@@ -597,7 +552,6 @@
                     document.getElementById('statLowStock').innerText = data.data.low_stock_count;
                     document.getElementById('statTotalCost').innerText = `฿${data.data.total_cost_value.toLocaleString()}`;
                     document.getElementById('statTotalValue').innerText = `฿${data.data.total_sell_value.toLocaleString()}`;
-                    
                     renderDashboardCharts(data.data);
                 }
             } catch (err) { console.error(err); }
@@ -611,7 +565,6 @@
             try {
                 const res = await fetch(`/api/products?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}&sort_by=${sortBy}&page=${currentPage}&per_page=${perPage}`);
                 const data = await res.json();
-
                 if (data.success) {
                     const tbody = document.getElementById('productTableBody');
                     tbody.innerHTML = data.products.map(p => `
@@ -627,16 +580,15 @@
                             <td class="text-end fw-bold text-primary">฿${p.selling_price.toLocaleString()}</td>
                             <td class="text-center">
                                 ${currentUser.role !== 'customer' ? `
-                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditProductModal('${p.sku}')" title="แก้ไขสินค้า"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditProductModal('${p.sku}')" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
                                     <button class="btn btn-sm btn-outline-success me-1" onclick="openRestockModal('${p.sku}', '${p.name.replace(/'/g, "\\'")}')" title="ปรับสต๊อก"><i class="fa-solid fa-plus"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct('${p.sku}')" title="ลบสินค้า"><i class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct('${p.sku}')" title="ลบ"><i class="fa-solid fa-trash"></i></button>
                                 ` : `
                                     <button class="btn btn-sm btn-success" onclick="quickOrder('${p.sku}')"><i class="fa-solid fa-cart-plus me-1"></i>สั่งซื้อ</button>
                                 `}
                             </td>
                         </tr>
                     `).join('');
-
                     renderPagination(data.pagination);
                 }
             } catch (err) { console.error(err); }
@@ -645,71 +597,35 @@
         function renderPagination(pagination) {
             const container = document.getElementById('paginationControls');
             const info = document.getElementById('paginationInfo');
-            
             info.innerText = `หน้า ${pagination.current_page} / ${pagination.total_pages} (รวมทั้งหมด ${pagination.total_items} รายการ)`;
-
-            if (pagination.total_pages <= 1) {
-                container.innerHTML = '';
-                return;
-            }
+            if (pagination.total_pages <= 1) { container.innerHTML = ''; return; }
 
             let html = `<ul class="pagination pagination-sm mb-0">`;
-            html += `<li class="page-item ${pagination.current_page === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" onclick="changePage(${pagination.current_page - 1}); return false;">ย้อนกลับ</a>
-            </li>`;
-
+            html += `<li class="page-item ${pagination.current_page === 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="changePage(${pagination.current_page - 1}); return false;">ย้อนกลับ</a></li>`;
             for (let i = 1; i <= pagination.total_pages; i++) {
-                html += `<li class="page-item ${i === pagination.current_page ? 'active' : ''}">
-                    <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
-                </li>`;
+                html += `<li class="page-item ${i === pagination.current_page ? 'active' : ''}"><a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a></li>`;
             }
-
-            html += `<li class="page-item ${pagination.current_page === pagination.total_pages ? 'disabled' : ''}">
-                <a class="page-link" href="#" onclick="changePage(${pagination.current_page + 1}); return false;">ถัดไป</a>
-            </li>`;
+            html += `<li class="page-item ${pagination.current_page === pagination.total_pages ? 'disabled' : ''}"><a class="page-link" href="#" onclick="changePage(${pagination.current_page + 1}); return false;">ถัดไป</a></li>`;
             html += `</ul>`;
-
             container.innerHTML = html;
         }
 
-        function changePage(page) {
-            currentPage = page;
-            loadProducts();
-        }
+        function changePage(page) { currentPage = page; loadProducts(); }
 
         function renderDashboardCharts(summaryData) {
             const colorPalette = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
-
             if (categoryChart) categoryChart.destroy();
             if (companyChart) companyChart.destroy();
             if (productChart) productChart.destroy();
 
-            const catLabels = Object.keys(summaryData.category_summary || {});
-            const catValues = Object.values(summaryData.category_summary || {});
             const ctxCat = document.getElementById('categoryPieChart').getContext('2d');
-            categoryChart = new Chart(ctxCat, {
-                type: 'pie',
-                data: { labels: catLabels, datasets: [{ data: catValues, backgroundColor: colorPalette }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-            });
+            categoryChart = new Chart(ctxCat, { type: 'pie', data: { labels: Object.keys(summaryData.category_summary || {}), datasets: [{ data: Object.values(summaryData.category_summary || {}), backgroundColor: colorPalette }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
 
-            const compLabels = Object.keys(summaryData.company_summary || {});
-            const compValues = Object.values(summaryData.company_summary || {});
             const ctxComp = document.getElementById('companyPieChart').getContext('2d');
-            companyChart = new Chart(ctxComp, {
-                type: 'pie',
-                data: { labels: compLabels, datasets: [{ data: compValues, backgroundColor: colorPalette.slice(2) }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-            });
+            companyChart = new Chart(ctxComp, { type: 'pie', data: { labels: Object.keys(summaryData.company_summary || {}), datasets: [{ data: Object.values(summaryData.company_summary || {}), backgroundColor: colorPalette.slice(2) }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
 
-            const prodLabels = Object.keys(summaryData.product_summary || {});
-            const prodValues = Object.values(summaryData.product_summary || {});
             const ctxProd = document.getElementById('productPieChart').getContext('2d');
-            productChart = new Chart(ctxProd, {
-                type: 'doughnut',
-                data: { labels: prodLabels, datasets: [{ data: prodValues, backgroundColor: colorPalette.slice(1) }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-            });
+            productChart = new Chart(ctxProd, { type: 'doughnut', data: { labels: Object.keys(summaryData.product_summary || {}), datasets: [{ data: Object.values(summaryData.product_summary || {}), backgroundColor: colorPalette.slice(1) }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
         }
 
         function openProductModal() { productModal.show(); }
@@ -729,20 +645,10 @@
                 cost_price: document.getElementById('pCost').value,
                 selling_price: document.getElementById('pPrice').value
             };
-
-            const res = await fetch('/api/products/add', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            const res = await fetch('/api/products/add', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                productModal.hide();
-                document.getElementById('productForm').reset();
-                loadProducts();
-                loadSummary();
-            }
+            if (data.success) { productModal.hide(); document.getElementById('productForm').reset(); loadProducts(); loadSummary(); }
         });
 
         async function openEditProductModal(sku) {
@@ -777,48 +683,29 @@
                 cost_price: document.getElementById('editCost').value,
                 selling_price: document.getElementById('editPrice').value
             };
-
-            const res = await fetch('/api/products/update', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            const res = await fetch('/api/products/update', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                editProductModal.hide();
-                loadProducts();
-                loadSummary();
-            }
+            if (data.success) { editProductModal.hide(); loadProducts(); loadSummary(); }
         });
 
         document.getElementById('importForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const fileInput = document.getElementById('excelFile');
             if (!fileInput.files[0]) return;
-
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
-
-            const res = await fetch('/api/import/excel', {
-                method: 'POST',
-                body: formData
-            });
+            const res = await fetch('/api/import/excel', { method: 'POST', body: formData });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                importModal.hide();
-                document.getElementById('importForm').reset();
-                loadProducts();
-                loadSummary();
-            }
+            if (data.success) { importModal.hide(); document.getElementById('importForm').reset(); loadProducts(); loadSummary(); }
         });
 
         function openRestockModal(sku, name) {
             document.getElementById('restockSku').value = sku;
             document.getElementById('restockProductName').innerText = `${name} (${sku})`;
             document.getElementById('restockQty').value = 10;
-            document.getElementById('restockReason').value = "เติมสต๊อกสินค้า";
+            document.getElementById('restockReason').value = "เติมสต๊อก";
             restockModal.show();
         }
 
@@ -832,31 +719,29 @@
                 current_role: currentUser.role,
                 current_user: currentUser.username
             };
-
-            const res = await fetch('/api/products/restock', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            const res = await fetch('/api/products/restock', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                restockModal.hide();
-                loadProducts();
-                loadSummary();
-            }
+            if (data.success) { restockModal.hide(); loadProducts(); loadSummary(); }
         });
 
         async function deleteProduct(sku) {
             if (!confirm(`ยืนยันการลบสินค้า SKU ${sku}?`)) return;
-            const res = await fetch('/api/products/delete', {
-                method: 'DELETE',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ sku, current_role: currentUser.role, current_user: currentUser.username })
-            });
+            const res = await fetch('/api/products/delete', { method: 'DELETE', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ sku, current_role: currentUser.role, current_user: currentUser.username }) });
             const data = await res.json();
             alert(data.message);
             if (data.success) { loadProducts(); loadSummary(); }
+        }
+
+        async function resetAllData() {
+            if (currentUser.role !== 'admin') { alert('เฉพาะ Admin เท่านั้น'); return; }
+            if (!confirm('⚠️ คำเตือน: คุณต้องการล้างข้อมูลทั้งหมดในระบบใช่หรือไม่?')) return;
+            try {
+                const res = await fetch('/api/reset-data', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ current_role: currentUser.role, current_user: currentUser.username }) });
+                const data = await res.json();
+                alert(data.message);
+                if (data.success) { loadSummary(); loadProducts(); loadOrders(); loadPOs(); loadStockCards(); loadLogs(); }
+            } catch (err) { alert('เกิดข้อผิดพลาด'); }
         }
 
         async function loadOrders() {
@@ -872,14 +757,8 @@
                             <td>${o.product_name}</td>
                             <td class="text-center">${o.quantity}</td>
                             <td class="text-end fw-bold">฿${o.total_price.toLocaleString()}</td>
-                            <td class="text-center">
-                                <span class="badge ${o.status === 'Approved' ? 'bg-success' : 'bg-warning text-dark'}">${o.status}</span>
-                            </td>
-                            <td class="text-center">
-                                ${(currentUser.role !== 'customer' && o.status === 'Pending') ? `
-                                    <button class="btn btn-sm btn-success me-1" onclick="approveOrder('${o.order_id}')"><i class="fa-solid fa-check me-1"></i>อนุมัติ</button>
-                                ` : '-'}
-                            </td>
+                            <td class="text-center"><span class="badge ${o.status === 'Approved' ? 'bg-success' : 'bg-warning text-dark'}">${o.status}</span></td>
+                            <td class="text-center">${(currentUser.role !== 'customer' && o.status === 'Pending') ? `<button class="btn btn-sm btn-success me-1" onclick="approveOrder('${o.order_id}')"><i class="fa-solid fa-check me-1"></i>อนุมัติ</button>` : '-'}</td>
                         </tr>
                     `).join('');
                 }
@@ -899,14 +778,8 @@
                             <td>${p.product_name} (${p.sku})</td>
                             <td class="text-center">${p.quantity}</td>
                             <td class="text-end fw-bold">฿${p.total_cost.toLocaleString()}</td>
-                            <td class="text-center">
-                                <span class="badge ${p.status === 'Received' ? 'bg-success' : 'bg-primary'}">${p.status}</span>
-                            </td>
-                            <td class="text-center">
-                                ${(currentUser.role !== 'customer' && p.status === 'Ordered') ? `
-                                    <button class="btn btn-sm btn-success" onclick="receivePO('${p.po_id}')"><i class="fa-solid fa-box-archive me-1"></i>รับของเข้าคลัง</button>
-                                ` : '-'}
-                            </td>
+                            <td class="text-center"><span class="badge ${p.status === 'Received' ? 'bg-success' : 'bg-primary'}">${p.status}</span></td>
+                            <td class="text-center">${(currentUser.role !== 'customer' && p.status === 'Ordered') ? `<button class="btn btn-sm btn-success" onclick="receivePO('${p.po_id}')"><i class="fa-solid fa-box-archive me-1"></i>รับของ</button>` : '-'}</td>
                         </tr>
                     `).join('');
                 }
@@ -918,48 +791,26 @@
             const data = await res.json();
             if (data.success) {
                 const select = document.getElementById('poSkuSelect');
-                select.innerHTML = data.products.map(p => `<option value="${p.sku}">${p.name} (SKU: ${p.sku} | ซัพพลายเออร์: ${p.company})</option>`).join('');
+                select.innerHTML = data.products.map(p => `<option value="${p.sku}">${p.name} (SKU: ${p.sku})</option>`).join('');
                 poModal.show();
             }
         }
 
         document.getElementById('poForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const payload = {
-                current_role: currentUser.role,
-                current_user: currentUser.username,
-                sku: document.getElementById('poSkuSelect').value,
-                supplier: document.getElementById('poSupplier').value,
-                quantity: parseInt(document.getElementById('poQty').value)
-            };
-
-            const res = await fetch('/api/po/create', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            const payload = { current_role: currentUser.role, current_user: currentUser.username, sku: document.getElementById('poSkuSelect').value, supplier: document.getElementById('poSupplier').value, quantity: parseInt(document.getElementById('poQty').value) };
+            const res = await fetch('/api/po/create', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                poModal.hide();
-                loadPOs();
-            }
+            if (data.success) { poModal.hide(); loadPOs(); }
         });
 
         async function receivePO(poId) {
-            if (!confirm(`ยืนยันการรับสินค้าตามใบสั่งซื้อ ${poId} เข้าคลัง?`)) return;
-            const res = await fetch('/api/po/receive', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ po_id: poId, current_role: currentUser.role, current_user: currentUser.username })
-            });
+            if (!confirm(`ยืนยันการรับสินค้าตามใบสั่งซื้อ ${poId}?`)) return;
+            const res = await fetch('/api/po/receive', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ po_id: poId, current_role: currentUser.role, current_user: currentUser.username }) });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                loadPOs();
-                loadProducts();
-                loadSummary();
-            }
+            if (data.success) { loadPOs(); loadProducts(); loadSummary(); }
         }
 
         async function loadStockCards() {
@@ -993,10 +844,7 @@
                     const list = document.getElementById('auditLogList');
                     list.innerHTML = data.audit_logs.map(l => `
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>[${l.action}]</strong> ${l.details}
-                                <div class="small text-muted">โดย: ${l.username} (${l.role})</div>
-                            </div>
+                            <div><strong>[${l.action}]</strong> ${l.details}<div class="small text-muted">โดย: ${l.username} (${l.role})</div></div>
                             <span class="badge bg-light text-dark">${l.timestamp}</span>
                         </li>
                     `).join('');
@@ -1014,45 +862,22 @@
             }
         }
 
-        function quickOrder(sku) {
-            openOrderModal();
-            setTimeout(() => { document.getElementById('orderSkuSelect').value = sku; }, 200);
-        }
+        function quickOrder(sku) { openOrderModal(); setTimeout(() => { document.getElementById('orderSkuSelect').value = sku; }, 200); }
 
         document.getElementById('orderForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const payload = {
-                sku: document.getElementById('orderSkuSelect').value,
-                quantity: parseInt(document.getElementById('orderQty').value),
-                customer_name: currentUser.name
-            };
-
-            const res = await fetch('/api/orders/create', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            const payload = { sku: document.getElementById('orderSkuSelect').value, quantity: parseInt(document.getElementById('orderQty').value), customer_name: currentUser.name };
+            const res = await fetch('/api/orders/create', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                orderModal.hide();
-                loadOrders();
-            }
+            if (data.success) { orderModal.hide(); loadOrders(); }
         });
 
         async function approveOrder(orderId) {
-            const res = await fetch('/api/orders/approve', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ order_id: orderId, current_role: currentUser.role, current_user: currentUser.username })
-            });
+            const res = await fetch('/api/orders/approve', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ order_id: orderId, current_role: currentUser.role, current_user: currentUser.username }) });
             const data = await res.json();
             alert(data.message);
-            if (data.success) {
-                loadOrders();
-                loadProducts();
-                loadSummary();
-            }
+            if (data.success) { loadOrders(); loadProducts(); loadSummary(); }
         }
 
         function exportExcel() { window.location.href = '/api/export/excel'; }
@@ -1063,36 +888,7 @@
             document.getElementById('sortBy').value = 'sku';
             currentPage = 1;
             loadProducts();
-        }async function resetAllData() {
-    if (currentUser.role !== 'admin') {
-        alert('เฉพาะ Admin เท่านั้นที่สามารถล้างข้อมูลได้');
-        return;
-    }
-    
-    if (!confirm('⚠️ คำเตือน: คุณต้องการล้างข้อมูลสินค้า ออเดอร์ และประวัติทั้งหมดในระบบใช่หรือไม่? การกระทำนี้ไม่สามารถกู้คืนได้!')) return;
-
-    try {
-        const res = await fetch('/api/reset-data', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ current_role: currentUser.role, current_user: currentUser.username })
-        });
-        const data = await res.json();
-        alert(data.message);
-        
-        if (data.success) {
-            // รีเฟรชหน้าจอทั้งหมดให้เป็นค่าว่าง
-            loadSummary();
-            loadProducts();
-            loadOrders();
-            if (typeof loadPOs === 'function') loadPOs();
-            if (typeof loadStockCards === 'function') loadStockCards();
-            if (typeof loadLogs === 'function') loadLogs();
         }
-    } catch (err) {
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
-    }
-}
     </script>
 </body>
 </html>
