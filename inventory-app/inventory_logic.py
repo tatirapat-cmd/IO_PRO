@@ -567,50 +567,54 @@ def import_products_from_excel(file_stream, existing_products: List[Dict[str, An
                     actual_cols['selling_price'] = col
                     break
 
-        if 'sku' not in actual_cols or 'name' not in actual_cols:
-            return False, "ไฟล์ Excel ต้องมีคอลัมน์ 'SKU' และ 'Name'", 0
+        # ตรวจสอบความพร้อมของคอลัมน์ SKU และ Name อย่างปลอดภัย
+        sku_key = actual_cols.get('sku')
+        name_key = actual_cols.get('name')
+
+        if not sku_key or not name_key or sku_key not in df.columns or name_key not in df.columns:
+            return False, "ไฟล์ Excel ต้องมีคอลัมน์ 'sku' และ 'name' (หรือ รหัสสินค้า / ชื่อสินค้า)", 0
 
         imported_count = 0
         existing_skus = {p["sku"]: p for p in existing_products if isinstance(p, dict)}
 
         for _, row in df.iterrows():
-            sku_val = row.get(actual_cols['sku'], "")
+            sku_val = row.get(sku_key, "")
             sku = str(sku_val).strip().upper() if pd.notna(sku_val) else ""
             if not sku or sku == "NAN" or sku == "NONE":
                 continue
 
-            name_val = row.get(actual_cols['name'], "")
+            name_val = row.get(name_key, "")
             name = str(name_val).strip() if pd.notna(name_val) else ""
 
             comp_col = actual_cols.get('company')
-            company = str(row[comp_col]).strip() if comp_col and pd.notna(row[comp_col]) else "-"
+            company = str(row[comp_col]).strip() if comp_col and comp_col in df.columns and pd.notna(row[comp_col]) else "-"
 
             cat_col = actual_cols.get('category')
-            category = str(row[cat_col]).strip() if cat_col and pd.notna(row[cat_col]) else "ทั่วไป"
+            category = str(row[cat_col]).strip() if cat_col and cat_col in df.columns and pd.notna(row[cat_col]) else "ทั่วไป"
 
             unit_col = actual_cols.get('unit')
-            unit = str(row[unit_col]).strip() if unit_col and pd.notna(row[unit_col]) else "ชิ้น"
+            unit = str(row[unit_col]).strip() if unit_col and unit_col in df.columns and pd.notna(row[unit_col]) else "ชิ้น"
 
             price_col = actual_cols.get('selling_price')
-            selling_price = clean_number(row[price_col], 0.0) if price_col else 0.0
+            selling_price = clean_number(row[price_col], 0.0) if price_col and price_col in df.columns else 0.0
 
             cost_col = actual_cols.get('cost_price')
-            cost_price = clean_number(row[cost_col], selling_price) if cost_col else selling_price
+            cost_price = clean_number(row[cost_col], selling_price) if cost_col and cost_col in df.columns else selling_price
 
             qty_col = actual_cols.get('quantity')
-            quantity = int(clean_number(row[qty_col], 0)) if qty_col else 0
+            quantity = int(clean_number(row[qty_col], 0)) if qty_col and qty_col in df.columns else 0
 
             min_col = actual_cols.get('min_stock')
-            min_stock = int(clean_number(row[min_col], 5)) if min_col else 5
+            min_stock = int(clean_number(row[min_col], 5)) if min_col and min_col in df.columns else 5
 
             supp_col = actual_cols.get('supplier')
-            supplier = str(row[supp_col]).strip() if supp_col and pd.notna(row[supp_col]) else company
+            supplier = str(row[supp_col]).strip() if supp_col and supp_col in df.columns and pd.notna(row[supp_col]) else company
 
             wh_col = actual_cols.get('warehouse')
-            warehouse = str(row[wh_col]).strip() if wh_col and pd.notna(row[wh_col]) else "คลังหลัก"
+            warehouse = str(row[wh_col]).strip() if wh_col and wh_col in df.columns and pd.notna(row[wh_col]) else "คลังหลัก"
 
             exp_col = actual_cols.get('expiry_date')
-            expiry_date = str(row[exp_col]).strip() if exp_col and pd.notna(row[exp_col]) else ""
+            expiry_date = str(row[exp_col]).strip() if exp_col and exp_col in df.columns and pd.notna(row[exp_col]) else ""
 
             prod_data = {
                 "sku": sku,
