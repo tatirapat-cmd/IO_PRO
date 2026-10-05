@@ -244,6 +244,28 @@ def approve_order():
         return jsonify({'success': False, 'message': msg}), 400
     except Exception as e:
         return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาดในการอนุมัติคำสั่งซื้อ: {str(e)}"}), 500
+@app.route('/api/reset-data', methods=['POST'])
+def reset_data():
+    try:
+        data = request.get_json() or {}
+        role = data.get('current_role')
+        username = data.get('current_user')
+
+        if role != 'admin':
+            return jsonify({'success': False, 'message': 'เฉพาะผู้ดูแลระบบ (Admin) เท่านั้นที่มีสิทธิ์ล้างข้อมูล'}), 403
+
+        # ล้างข้อมูลสินค้า, ออเดอร์, Stock card, และ Supplier PO
+        db_data["products"] = []
+        db_data["purchase_orders"] = []
+        db_data["stock_cards"] = []
+        db_data["supplier_pos"] = []
+        
+        logic.add_audit_log(db_data["audit_logs"], username, role, 'RESET_DATA', 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว')
+        persist_data()
+
+        return jsonify({'success': True, 'message': 'ล้างข้อมูลทั้งหมดในระบบเรียบร้อยแล้ว'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f"เกิดข้อผิดพลาด: {str(e)}"}), 500
 
 # --- Supplier PO Routes ---
 @app.route('/api/po', methods=['GET'])
